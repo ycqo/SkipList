@@ -177,24 +177,40 @@ public class SkipList<K, V> { //定义基于跳表的KV键值对存储数据的�
         System.out.println("--------dumpFile--------");
         Node<K, V> node = first.nexts[0];
         File file = new File(FILE);
+        FileOutputStream fos = null;
+        OutputStreamWriter osw = null;
+        BufferedWriter bw = null;
         try {
-            FileOutputStream fos = new FileOutputStream(file, true);
-            OutputStreamWriter osw = new OutputStreamWriter(fos);
-            BufferedWriter bw = new BufferedWriter(osw);
+            fos = new FileOutputStream(file, true);
+            osw = new OutputStreamWriter(fos);
+            bw = new BufferedWriter(osw);
             while(node != null){
                 bw.write(node.getKey()+":"+node.getValue());
                 System.out.println(node.getKey()+":"+node.getValue());
                 bw.newLine();
                 node = node.nexts[0];
             }
-            bw.close();
-            osw.close();
-            fos.close();
             return ;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                bw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                osw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -203,10 +219,13 @@ public class SkipList<K, V> { //定义基于跳表的KV键值对存储数据的�
         System.out.println("--------laodFile--------");
         File file = new File(FILE);
         String line;
+        FileInputStream fis = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
         try {
-            FileInputStream fis = new FileInputStream(file);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
+            fis = new FileInputStream(file);
+            isr = new InputStreamReader(fis);
+            br = new BufferedReader(isr);
             while((line=br.readLine())!=null){
                 String[] s=line.split(":");
                 K key = (K) s[0];
@@ -214,14 +233,27 @@ public class SkipList<K, V> { //定义基于跳表的KV键值对存储数据的�
                 put(key, value);
                 System.out.println("key:"+s[0]+",value:"+s[1]);
             }
-            br.close();
-            isr.close();
-            fis.close();
             return ;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                isr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
